@@ -14,6 +14,10 @@ from rest_framework import mixins, generics, viewsets
 # for Blogs &  Comments
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializer, CommentSerializer
+# custom pagination
+from .paginations import CustomPagination
+# filters
+from employees.filters import EmployeeFilter
 
 ### FBV - Function Based Views
 
@@ -182,6 +186,8 @@ class  EmployeeViewset(viewsets.ViewSet):
 class EmployeeViewset(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    pagination_class = CustomPagination
+    filterset_class = EmployeeFilter
 
 ### Blogs & Comments
 class BlogsView(generics.ListCreateAPIView):
