@@ -18,7 +18,8 @@ from blogs.serializers import BlogSerializer, CommentSerializer
 from .paginations import CustomPagination
 # filters
 from employees.filters import EmployeeFilter
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 ### FBV - Function Based Views
 
@@ -189,13 +190,17 @@ class EmployeeViewset(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
     pagination_class = CustomPagination
     filterset_class = EmployeeFilter
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
+    search_fields = ['emp_name']   
+    ordering_fields = ['emp_id']
 
 ### Blogs & Comments
 class BlogsView(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['blog_title', 'blog_body']
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['blog_title', 'blog_body']   
+    ordering_fields = ['id', 'blog_title']
 class CommentsView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
